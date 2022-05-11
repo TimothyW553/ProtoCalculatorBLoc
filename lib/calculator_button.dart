@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:protocalculatorbloc/model/calculator_result.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:protocalculatorbloc/bloc/calculator_bloc.dart';
+import 'package:protocalculatorbloc/bloc/calculator_event.dart';
 
-class CalculatorButton extends StatelessWidget {
+class CalculatorButton extends StatefulWidget {
   final String text;
 
   const CalculatorButton({Key? key, required this.text}) : super(key: key);
 
+  @override
+  State<CalculatorButton> createState() => _CalculatorButtonState();
+}
+
+class _CalculatorButtonState extends State<CalculatorButton> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -16,49 +23,22 @@ class CalculatorButton extends StatelessWidget {
           height: double.infinity,
           child: TextButton(
             child: Text(
-              text,
+              widget.text,
               style: const TextStyle(
                 fontSize: 37.0,
                 color: Colors.black,
               ),
             ),
             onPressed: () {
-              // handlePress(text, context);
+              setState(() {
+                context
+                    .read<CalculatorBloc>()
+                    .add(CalculatorEvent(command: widget.text));
+              });
             },
           ),
         ),
       ),
     );
   }
-
-  // void handlePress(String title, BuildContext context) {
-  //   var calculator = context.read<CalculatorResult>();
-
-  //   final numberString = calculator.numberString;
-  //   final calculate = calculator.shouldCalculate;
-
-  //   // use "guard clauses" method to make code cleaner
-  //   if (title == "+" || title == "-" || title == "×" || title == "÷") {
-  //     // use type enum or classes
-  //     if (calculate) {
-  //       // if we should calculate
-  //       calculator.calculateValue();
-  //     } else {
-  //       calculator.result = double.parse(numberString);
-  //       calculator.calculate = true;
-  //     }
-  //     calculator.numberString = "0";
-  //     calculator.operation = title;
-  //   } else if (title == "=") {
-  //     calculator.calculateValue();
-  //     calculator.calculate = false;
-  //   } else {
-  //     // a number
-  //     if (numberString == "0") {
-  //       calculator.numberString = "";
-  //     }
-  //     calculator.numberString += title;
-  //     calculator.displayString = numberString;
-  //   }
-  // }
 }

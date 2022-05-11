@@ -1,30 +1,33 @@
 import 'package:equatable/equatable.dart';
+// use: https://pub.dev/packages/freezed for copyWith
+// since model.copy(number: null) doesn't actually make number null
 
-class CalculatorResult extends Equatable {
-  /// "intermediate" result of calculation
+enum Operation { plus, minus, multiply, divide }
+
+class CalculatorModel extends Equatable {
+  /// number entered by user
   final int? number;
 
   /// Type of operation
-  final String? operation;
+  final Operation? operation;
 
   /// Double result to perform calculations on
-  final double? result;
+  final int? result;
   final bool? shouldCalculate;
 
-  const CalculatorResult(
+  const CalculatorModel(
       {this.number, this.operation, this.result, this.shouldCalculate});
 
   @override
   List<Object?> get props => [number, operation, result, shouldCalculate];
 
-  CalculatorResult copy({
+  CalculatorModel copyWith({
     int? number,
-    String? displayResult,
-    String? operation,
-    double? result,
+    Operation? operation,
+    int? result,
     bool? shouldCalculate,
   }) {
-    return CalculatorResult(
+    return CalculatorModel(
       number: number ?? this.number,
       operation: operation ?? this.operation,
       result: result ?? this.result,

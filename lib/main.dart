@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:protocalculatorbloc/model/calculator_result.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:protocalculatorbloc/bloc/calculator_bloc.dart';
+import 'package:protocalculatorbloc/bloc/calculator_state.dart';
 import 'package:protocalculatorbloc/calculator_button_row.dart';
 
 void main() {
@@ -12,14 +13,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<CalculatorResult>(
-      create: (context) => CalculatorResult(),
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: BlocProvider(
+        create: (_) => CalculatorBloc(),
+        child: const MyHomePage(title: 'Flutter Demo Home Page'),
       ),
     );
   }
@@ -36,26 +37,27 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    String displayValue = Provider.of<CalculatorResult>(context).numberString;
-
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(
-            color: const Color.fromRGBO(248, 248, 248, 1),
-            height: 168,
-            width: MediaQuery.of(context).size.width,
-            alignment: Alignment.bottomRight,
-            padding: const EdgeInsets.only(bottom: 20, right: 42),
-            child: Text(
-              displayValue,
-              style: const TextStyle(
-                fontSize: 50.0,
-                fontWeight: FontWeight.bold,
+          BlocBuilder<CalculatorBloc, CalculatorState>(
+              builder: (context, state) {
+            return Container(
+              color: const Color.fromRGBO(248, 248, 248, 1),
+              height: 168,
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.bottomRight,
+              padding: const EdgeInsets.only(bottom: 20, right: 42),
+              child: Text(
+                state.result,
+                style: const TextStyle(
+                  fontSize: 50.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          ),
+            );
+          }),
           Expanded(
             child: Column(
               children: const <Widget>[
