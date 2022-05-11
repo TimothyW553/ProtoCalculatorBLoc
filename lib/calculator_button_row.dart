@@ -6,14 +6,16 @@ class CalculatorButtonsRow extends StatelessWidget {
   final String button2;
   final String button3;
   final String button4;
+  final void Function(String) fn;
 
-  const CalculatorButtonsRow(
-      {Key? key,
-      required this.button1,
-      required this.button2,
-      required this.button3,
-      required this.button4})
-      : super(key: key);
+  const CalculatorButtonsRow({
+    Key? key,
+    required this.button1,
+    required this.button2,
+    required this.button3,
+    required this.button4,
+    required this.fn,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +24,19 @@ class CalculatorButtonsRow extends StatelessWidget {
         children: <Widget>[
           CalculatorButton(
             text: button1,
+            fn: fn,
           ),
           CalculatorButton(
             text: button2,
+            fn: fn,
           ),
           CalculatorButton(
             text: button3,
+            fn: fn,
           ),
           CalculatorButton(
             text: button4,
+            fn: fn,
           ),
         ],
       ),

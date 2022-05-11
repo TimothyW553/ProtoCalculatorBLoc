@@ -5,13 +5,15 @@ class CalculatorState extends Equatable {
   String _operation = "";
   String _result = "0";
   int _bufferIndex = 0;
+  bool _shouldWipe = false;
 
   String get operation => _operation;
   String get result => _result;
   int get bufferIndex => _bufferIndex;
+  bool get shouldWipe => _shouldWipe;
 
   void applyCommand(String cmd) {
-    if (cmd == "+" || cmd == "-" || cmd == "*" || cmd == "/" || cmd == "=") {
+    if (cmd == "+" || cmd == "-" || cmd == "×" || cmd == "÷" || cmd == "=") {
       _setOperation(cmd);
     } else {
       _addDigit(cmd);
@@ -24,6 +26,7 @@ class CalculatorState extends Equatable {
       if (!isEqualSign) {
         _operation = operation; // leave as is
         _bufferIndex++; // move to next integer
+        _shouldWipe = true;
       }
     } else {
       double calculationResult = _calculate(_buffer[0], _buffer[1]);
@@ -33,6 +36,7 @@ class CalculatorState extends Equatable {
       _operation = isEqualSign ? "" : operation;
       _bufferIndex = isEqualSign ? 0 : 1;
     }
+    _shouldWipe = !isEqualSign;
   }
 
   double _calculate(double op1, double op2) {
@@ -41,9 +45,9 @@ class CalculatorState extends Equatable {
         return op1 + op2;
       case "-":
         return op1 - op2;
-      case "*":
+      case "×":
         return op1 * op2;
-      case "/":
+      case "÷":
         return op1 / op2;
       default:
         return op1;
@@ -51,9 +55,10 @@ class CalculatorState extends Equatable {
   }
 
   void _addDigit(String digit) {
-    final shouldWipe = _result == "0";
+    final shouldWipe = _result == "0" || _shouldWipe;
     final currentResult = shouldWipe ? "" : _result;
     _result = currentResult + digit;
+    _shouldWipe = false;
     _buffer[_bufferIndex] = double.parse(_result);
   }
 

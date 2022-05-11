@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:protocalculatorbloc/bloc/calculator_bloc.dart';
 import 'package:protocalculatorbloc/bloc/calculator_state.dart';
+import 'package:protocalculatorbloc/bloc/calculator_event.dart';
 import 'package:protocalculatorbloc/calculator_button_row.dart';
 
 void main() {
@@ -35,6 +36,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  _onPressed(String command) {
+    setState(() {
+      context.read<CalculatorBloc>().add(CalculatorEvent(command: command));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,30 +67,34 @@ class _MyHomePageState extends State<MyHomePage> {
           }),
           Expanded(
             child: Column(
-              children: const <Widget>[
+              children: <Widget>[
                 CalculatorButtonsRow(
                   button1: "7",
                   button2: "8",
                   button3: "9",
                   button4: "×",
+                  fn: _onPressed,
                 ),
                 CalculatorButtonsRow(
                   button1: "4",
                   button2: "5",
                   button3: "6",
                   button4: "÷",
+                  fn: _onPressed,
                 ),
                 CalculatorButtonsRow(
                   button1: "1",
                   button2: "2",
                   button3: "3",
                   button4: "-",
+                  fn: _onPressed,
                 ),
                 CalculatorButtonsRow(
                   button1: " ",
                   button2: "0",
                   button3: "=",
                   button4: "+",
+                  fn: _onPressed,
                 ),
               ],
             ),
